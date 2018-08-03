@@ -1,7 +1,8 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Navbar from '../Navbar/Navbar';
+import BookListItem from './BookListItem';
 import './BookList.css';
 
 class BookList extends PureComponent {  
@@ -19,23 +20,29 @@ class BookList extends PureComponent {
   renderBookList() {
     const { books } = this.props;
 
-    return (
-      <div>BOOKS LOL</div>
-    )
+    return books.map((book, index) => {
+      return <BookListItem key={index} book={book} />
+    })
   }
 
   render() {
-    const { loading, error } = this.props;
+    const { loading, error, books } = this.props;
+
     return (
-      <div className="book-list__container">
+      <Fragment>
         <Navbar />
-        { loading &&
-          'LOADING!!'
-        }
-        { !loading && !error && 
-          this.renderBookList()
-        }
-      </div>
+        <div className="book-list__container">
+          { loading &&
+            'LOADING!!'
+          }
+          { !loading && !error && books &&
+            this.renderBookList()
+          }
+          { error &&
+            'ERROR'
+          }
+        </div>
+      </Fragment>
     );
   }
 }

@@ -1,0 +1,30 @@
+@import '../../../public/styles/global-styles';
+.book-list {
+    &__container {
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        grid-row-gap: 40px;
+        justify-content: center;
+    }
+    &__item {
+        display: flex;
+        flex-direction: column;
+        grid-column: span 12;
+        @include breakpoint-min(lg) {
+            grid-column: span 6;
+        }
+        @include breakpoint-min(xl) {
+            grid-column: span 4;
+        }
+        &-img {
+            margin: auto;
+            width: 100%;
+            max-width: 260px;
+            height: 400px;
+        }
+        &-info {
+        	padding: 15px 10px;
+            text-align: center;
+        }
+    }
+}

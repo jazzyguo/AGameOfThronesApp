@@ -10,7 +10,7 @@ class Header extends PureComponent {
   render() {
     return (
       <div className="header">
-        GAME OF THRONES
+        A GAME OF THRONES
       </div>
     );
   }
