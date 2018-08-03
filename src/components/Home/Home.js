@@ -11,7 +11,6 @@ class Home extends PureComponent {
   render() {
     return (
       <div className="home__container">
-      HOME
         <Link className="home__book-link" to='/books'>
               Books
         </Link>

@@ -5,7 +5,7 @@ const GET_BOOKS_FAILURE = 'GET_BOOKS_FAILURE';
 
 const initState = {
   books: null,
-  fetching: false,
+  loading: false,
   error: null
 };
 
@@ -15,21 +15,21 @@ export default function bookReducer(state = initState, action) {
 
     case GET_BOOKS:
     	newState = Object.assign({}, state, {
-        fetching: true,
+        loading: true,
         error: null
       });
     	break;
     
     case GET_BOOKS_SUCCESS:
       newState = Object.assign({}, state, {
-        fetching: false,
+        loading: false,
         books: action.books
       });
       break;
 
     case GET_BOOKS_FAILURE:
       newState = Object.assign({}, state, {
-        fetching: false,
+        loading: false,
         books: null,
         error: action.error
       });

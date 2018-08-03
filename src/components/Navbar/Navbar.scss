@@ -1,7 +1,10 @@
 @import '../../../public/styles/global-styles';
 
 .navbar {
+	display: flex;
+	justify-content: center;
 	&__link {
+		margin: 0 15px;	
 		&--selected {
 			color: gold;
 		}

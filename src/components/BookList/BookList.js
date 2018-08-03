@@ -16,24 +16,46 @@ class BookList extends PureComponent {
     requestBooks();
   }
 
-  render() {
+  renderBookList() {
+    const { books } = this.props;
 
+    return (
+      <div>BOOKS LOL</div>
+    )
+  }
+
+  render() {
+    const { loading, error } = this.props;
     return (
       <div className="book-list__container">
         <Navbar />
-        BOOKS 
+        { loading &&
+          'LOADING!!'
+        }
+        { !loading && !error && 
+          this.renderBookList()
+        }
       </div>
     );
   }
 }
 
+/*
+ * {requestBooks} - dispatches get_books
+ * {loading} - loading status for books
+ * {books} - array of book data
+ * {error} - error message
+ */
 BookList.propTypes = {
-  
+  requestBooks: PropTypes.func,
+  loading: PropTypes.bool,
+  books: PropTypes.array,
+  error: PropTypes.object 
 };
 
 const mapStateToProps = state => {
   return {
-    fetching: state.books.fetching,
+    loading: state.books.loading,
     books: state.books.books,
     error: state.books.error
   };
