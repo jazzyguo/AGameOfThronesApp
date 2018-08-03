@@ -1,6 +1,7 @@
 import 'regenerator-runtime/runtime';
 import React from 'react';
 import { Provider } from 'react-redux';
+import { reducer as formReducer } from 'redux-form';
 import { render } from 'react-dom';
 import { BrowserRouter, Route } from 'react-router-dom'
 import App from './components/App/App';
@@ -10,7 +11,8 @@ import bookReducer from './reducers/bookReducer';
 import rootSaga from './sagas/sagas';
 
 const _reducers = combineReducers({
-	books: bookReducer
+	books: bookReducer,
+  form: formReducer
 });
 
 const sagaMiddleware = createSagaMiddleware();

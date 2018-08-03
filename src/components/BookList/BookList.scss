@@ -1,6 +1,7 @@
 @import '../../../public/styles/global-styles';
 .book-list {
     &__container {
+        position: relative;
         display: grid;
         grid-template-columns: repeat(12, 1fr);
         grid-row-gap: 40px;
@@ -23,8 +24,27 @@
             height: 400px;
         }
         &-info {
-        	padding: 15px 10px;
+            padding: 15px 10px;
             text-align: center;
+        }
+    }
+    &__sort {
+        position: absolute;
+        top: -30px;
+        right: 0;
+        left: 0;
+        margin: auto;
+        font-size: 14px;
+        width: max-content;
+        display: flex;
+        @include breakpoint-min(lg) {
+            left: unset;
+            right: 70px;
+            margin: 0 0 15px 0;
+        }
+        label {
+            line-height: 18px;
+            margin-right: 5px;
         }
     }
 }
