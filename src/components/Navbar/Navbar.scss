@@ -1,0 +1,9 @@
+@import '../../../public/styles/global-styles';
+
+.navbar {
+	&__link {
+		&--selected {
+			color: gold;
+		}
+	}
+}

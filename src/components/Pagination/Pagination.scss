@@ -1,0 +1,55 @@
+@import '../../../public/styles/global-styles';
+.pagination {
+    position: fixed;
+    padding: 5px 0 2.5px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+    background-color: rgba(0, 0, 0, .6);
+    color: #FFF;
+    &__toggle {
+        display: flex;
+        position: fixed;
+        top: 50px;
+        right: 5px;
+        z-index: 1;
+        @include breakpoint-min(md) {
+            top: 75px;
+        }
+        svg {
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            fill: color(secondary);
+            margin: auto;
+            @include breakpoint-min(md) {
+                width: 40px;
+                height: 40px;
+            }
+        }
+        &--on {
+            svg {
+                fill: red;
+            }
+        }
+    }
+    span {
+        margin: 0 10px;
+    }
+    &__item {
+        cursor: pointer;
+        @include hover-supported() {
+            color: color(secondary);
+        }
+        &--selected {
+            color: color(secondary);
+        }
+    }
+    &__next, &__prev {
+        cursor: pointer;
+        @include hover-supported() {
+            color: color(secondary);
+        }
+    }
+}
