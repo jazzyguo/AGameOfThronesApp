@@ -4,6 +4,7 @@ import { Switch, Route } from 'react-router-dom'
 import Home from '../Home/Home';
 import BookList from '../BookList/BookList';
 import Houses from '../Houses/Houses';
+import HouseItemPage from '../Houses/HouseItem/HouseItemPage';
 import Header from '../Header/Header';
 import Modal from '../Modal/Modal';
 import './App.css';
@@ -26,7 +27,8 @@ class App extends PureComponent {
         <Switch>
           <Route exact path='/' component={Home}/>
           <Route path='/books' component={BookList}/>
-          <Route path='/houses' component={Houses}/>
+          <Route exact path='/houses' component={Houses}/>
+          <Route path='/houses/:houseId' component={HouseItemPage}/>
         </Switch>
       </div>
     );
@@ -39,4 +41,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps, null)(App);
+export default connect(mapStateToProps, null)(App);``

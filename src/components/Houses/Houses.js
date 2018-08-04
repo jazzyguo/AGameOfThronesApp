@@ -1,8 +1,9 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Navbar from '../Navbar/Navbar';
-import HouseItem from './HouseItem';
+import HouseItem from './HouseItem/HouseItem';
+import HouseSortForm from './HouseSortForm';
 import Pagination from '../Pagination/Pagination';
 import { bindAll } from 'lodash';
 import './Houses.css';
@@ -10,13 +11,14 @@ import './Houses.css';
 class Houses extends PureComponent {  
 
   constructor(props, context) {
-
 	  super(props);
 
     bindAll(this, [
-      '_goToPage'
+      '_goToPage',
+      '_handleSort'
     ]);
 
+    // default sort by name A-Z
     this.state = {
       sortedHouses: null
     }
@@ -50,26 +52,42 @@ class Houses extends PureComponent {
     });
   }
 
+  /* Values received from select are in the format:
+        name || region : asc||desc
+   * Able to sort by name and region
+   */
+   // NOT WORKING * TO DO
+  _handleSort(value) {
+    const values = value.housesort.split(':');
+    const sortBy = values[0];
+    const order = values[1];
+    // sort current data
+    console.log(sortBy, order);
+  }
+
   render() {
     const { page, loading, error } = this.props;
     const { sortedHouses } = this.state;
 
     return (
-      <div className="houses__container">
+      <Fragment>
         <Navbar />
-        { loading &&
-          'LOADING!!'
-        }
-        { !loading && !error && sortedHouses &&
-          this._renderHouses()
-        }
-        { error &&
-          'ERROR'
-        }
-        <Pagination currPage={page} 
-                    goToPage={this._goToPage} 
-                    totalPages={45} />
-      </div>
+        <div className="houses__container">
+          { /*<HouseSortForm onChange={ this._handleSort }/> */ }
+          { loading &&
+            'LOADING!!'
+          }
+          { !loading && !error && sortedHouses &&
+            this._renderHouses()
+          }
+          { error &&
+            'ERROR'
+          }
+          <Pagination currPage={page} 
+                      goToPage={this._goToPage} 
+                      totalPages={45} />
+        </div>
+      </Fragment>
     );
   }
 }
