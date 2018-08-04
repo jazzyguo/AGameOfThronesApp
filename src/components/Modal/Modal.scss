@@ -1,0 +1,42 @@
+@import '../../../public/styles/global-styles';
+.modal {
+    @include fixedCenter();
+    display: flex;
+    flex-direction: column;
+    background-color: color(primary);
+    padding: 2px;
+    text-align: center;
+    justify-content: center;
+    width: 98.5%;
+    padding: 25px 0;
+    @include breakpoint-min(md) {
+        width: auto;
+        padding: 25px 30px;
+    }
+    &__container {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.6);
+        z-index: 1000;
+        .close-icon {
+            cursor: pointer;
+            position: absolute;
+            top: 2px;
+            right: 5px;
+            fill: #000;
+            width: 20px;
+        }
+    }
+    svg {
+        &:hover {
+            .close-icon {
+                fill: red;
+            }
+        }
+    }
+}

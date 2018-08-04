@@ -1,11 +1,3 @@
-@mixin boxSize() {
-    margin: auto;
-    width: 100%;
-    border: 1px solid color(borderColor);
-    @include breakpoint-min(md) {
-        height: $boxHeight;
-    }
-}
 @mixin fixedCenter() {
     position: fixed;
     left: 50%;

@@ -1,5 +1,6 @@
 import React from 'react';
 import { reduxForm, Field } from 'redux-form';
+import PropTypes from 'prop-types';
 
 let BookSortForm = (props) => {
 
@@ -12,6 +13,13 @@ let BookSortForm = (props) => {
         <option value="numberOfPages:asc">Lowest # Pages</option>
       </Field>
   </form>;
+};
+
+/*
+ * {onChange} - On change handler for the select field
+ */
+BookSortForm.propTypes = {
+  onChange: PropTypes.func
 };
 
 export default BookSortForm = reduxForm({

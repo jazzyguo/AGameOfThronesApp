@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 /* Fetches the cover art for each book
  */
@@ -49,13 +50,31 @@ const BookImage = (props) => {
         imageURL = null;
     }
     
+    const { overlay } = props;
     return (
-      <img className="book-list__item-img" 
+      <div className="book-list__item-img__container">
+        <img className="book-list__item-img" 
            src={`/img/books/${imageURL}.png`} alt={ bookName }/>
+        { overlay &&
+        <div onClick={() => {props.showBookInfo(bookName)}} 
+             className="book-list__item-img__overlay"></div>
+        }
+      </div>
     );
   }
 
   return ( _fetchImage() );
 }
+
+/*
+ * {showBookInfo} - calls passed prop function to open the modal
+ * {bookName} - name of the book
+ * {overlay} - hover overlay for the img container
+ */
+BookImage.propTypes = {
+  showBookInfo: PropTypes.func,
+  bookName: PropTypes.string,
+  overlay: PropTypes.bool
+};
 
 export default BookImage;
