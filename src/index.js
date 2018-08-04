@@ -8,11 +8,13 @@ import App from './components/App/App';
 import {createStore, applyMiddleware, combineReducers, compose} from 'redux';
 import createSagaMiddleware from 'redux-saga';
 import bookReducer from './reducers/bookReducer';
+import houseReducer from './reducers/houseReducer';
 import modalReducer from './reducers/modalReducer';
 import rootSaga from './sagas/sagas';
 
 const _reducers = combineReducers({
 	books: bookReducer,
+  houses: houseReducer,
   modal: modalReducer,
   form: formReducer
 });

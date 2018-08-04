@@ -29,8 +29,9 @@ class BookList extends PureComponent {
   }
 
   componentWillReceiveProps(nextProps) {
+    const { books } = nextProps; 
     this.setState({
-      sortedBooks: nextProps.books  
+      sortedBooks: books  
     });
   }
 
@@ -39,7 +40,7 @@ class BookList extends PureComponent {
 
     return sortedBooks.map((book, index) => {
       return <BookListItem key={index} book={book} />
-    })
+    });
   }
 
   /* Values received from select are in the format:

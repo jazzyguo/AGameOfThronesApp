@@ -9,9 +9,13 @@
     justify-content: center;
     width: 98.5%;
     padding: 25px 0;
+    max-height: 90%;
+    overflow-y: scroll;
     @include breakpoint-min(md) {
         width: auto;
         padding: 25px 30px;
+        max-height: unset;
+        overflow-y: unset;
     }
     &__container {
         position: fixed;

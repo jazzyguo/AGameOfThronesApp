@@ -1,7 +1,4 @@
 import  React, { PureComponent } from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { goToPage, getPage } from '../../actions/actions';
 import PropTypes from 'prop-types';
 import { bindAll } from 'lodash';
 import './Pagination.css';
@@ -17,8 +14,6 @@ import './Pagination.css';
      then only render left dots
  * - Renders prev button if current page is not the first
  * - Renders next button if current page is not the last
- *
- * GIPHY API ONLY SUPPORTS OFFSETS UP TO 4999
  */
 
 class Pagination extends PureComponent {
@@ -31,40 +26,21 @@ class Pagination extends PureComponent {
     ]);
 
     this.state = {
-      totalPages: null
+      currPage: 1
     }
   }
 
-  // reset pagination
-  componentWillMount() {
-    this.props.actions.goToPage(1);
-  }
-
-  // remove pagination
-  componentWillUnmount() {
-    this.props.actions.goToPage(0);
-  }
-
   componentWillReceiveProps(nextProps) {
-    const { paginationData, perPage } = nextProps;
-    // calculates the total pages
-
-    // API ONLY SUPPORTS 4999 OFFSET
-    let totalPages = (paginationData) 
-      ? (paginationData.total_count <= 4999)
-        ? -~(paginationData.total_count / perPage)
-        : ~~((4999 + nextProps.perPage) / nextProps.perPage)
-      : null;
-
-    this.setState({totalPages});
+    const { currPage } = nextProps;
+    this.setState({currPage});
   }
 
   /* Renders and filters through the middle 
    * portion of the pagination
    */
   _renderMiddlePages() {
-    const { totalPages } = this.state;
-    const { currPage } = this.props;
+    const { currPage } = this.state;
+    const { totalPages } = this.props;
     let pagination = [];
 
     // creates all (1, totalPages] pagination - exclusive
@@ -93,20 +69,16 @@ class Pagination extends PureComponent {
   /* @ {pageNum} Int - Goes to this page in pagination
    */
   _goToPage(pageNum) {
-    const { actions, url, perPage } = this.props;
+    const { goToPage } = this.props;
 
     this._scrollUp();
-    // for pagination page indication
-    actions.goToPage(pageNum);
-    // api request
-    actions.getPage(url, pageNum, perPage);
+    goToPage(pageNum);
   }
 
   // animates window scrolling to top
   _scrollUp() {
      const step = 100;
      const d = document.documentElement
-     const scrollHeight = d.scrollHeight;
 
      window.scrollBy(0, -step);
      if(d.scrollTop === 0) {
@@ -122,8 +94,7 @@ class Pagination extends PureComponent {
    * {Prev} {First Page} {...} {page page page page} {....} {Last page} {Next}
    */
   render() {
-    const { paginationData, perPage, currPage } = this.props;
-    const { totalPages } = this.state;
+    const { currPage, totalPages } = this.props;
 
     return(
       <div className="pagination">
@@ -170,33 +141,15 @@ class Pagination extends PureComponent {
   }
 }
 
+/*
+ * {currPage} - current page of the pagination
+ * {goToPage} - function passed from parent
+ * {totalPages} - pages of pagination
+ */
 Pagination.propTypes = {
-  actions: PropTypes.object,
-  paginationData: PropTypes.object,
-  perPage: PropTypes.number,
   currPage: PropTypes.number,
-  url: PropTypes.string,
+  goToPage: PropTypes.function,
+  totalPages: PropTypes.number
 };
 
-const mapStateToProps = (state) => {
-  return {
-    paginationData: state.gifs.paginationData,
-    perPage: state.pagination.perPage,
-    currPage: state.pagination.currPage,
-    url: state.gifs.url
-  };
-}
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    actions: bindActionCreators({
-      goToPage,
-      getPage
-    }, dispatch)
-  };
-}
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Pagination);
+export default Pagination;
