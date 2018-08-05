@@ -25,9 +25,12 @@ class Houses extends PureComponent {
   }
 
   componentWillMount() {
-    const { requestHouses } = this.props;
-
-    requestHouses(1);
+    const { location: { state }, requestHouses, page } = this.props;
+    if(!state) {
+      requestHouses(1);
+    } else {
+      requestHouses(page);
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -91,11 +94,17 @@ class Houses extends PureComponent {
     );
   }
 }
+
+Houses.defaultProps = {
+  resetHouses: false
+};
+
 /*
  * {loading} - loading state for api request
  * {page} - current page in pagination 
  * {houses} - array of house objects
  * {error} - error message
+ * {resetHouses} - flag to keep or reset current page of pagination
  */
 Houses.propTypes = {
   loading: PropTypes.bool,

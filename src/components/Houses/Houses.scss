@@ -5,4 +5,10 @@
 	&__item {
 		
 	}
+	&__page {
+		&-info {
+			display: flex;
+			flex-direction:column;
+		}
+	}
 }
