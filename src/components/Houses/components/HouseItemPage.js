@@ -1,6 +1,8 @@
 import React, { PureComponent } from 'react';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import PropTypes from 'prop-types';
 import { checkArrayEmpty } from '../../../util/helpers';
 import CharacterCard from '../../CharacterCard/CharacterCard';
 
@@ -17,25 +19,29 @@ class HouseItemPage extends PureComponent {
 
   componentDidMount() {
     // render the house object passed from the link
-    const { state } = this.props.location;
+    const { requestHouse, location: { state } } = this.props;
+
     if(state) {
       this.setState({house: state.house});
     // otherwise direct link, so request the house from the api
     } else {
       const houseId = this.props.match.params.houseId;
-
-      axios.get(`https://www.anapioficeandfire.com/api/houses/${houseId}`)
-      .then((res) => {
-        const house = res.data;
-        this.setState({ house });
-      }).catch((err) => {
-        this.setState({ error: `Error fetching house ${houseId}`});
-      });
+      requestHouse(houseId);
     }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { selectedHouse, selectedHouseError } = nextProps; 
+    
+    this.setState({
+      house: selectedHouse,
+      error: selectedHouseError
+    });
   }
 
   render() {
     const { house, error } = this.state;
+    const { houseId } = this.props.match.params;
 
     return (
       <div className="houses__page">
@@ -48,7 +54,7 @@ class HouseItemPage extends PureComponent {
         }}>Back</Link>
         {/* Show Error Message*/}
         {error &&
-          <div>{ error }</div>
+          <div>Error fetching house { houseId }</div>
         }
         {/* House Info if loaded*/}
         {house &&
@@ -69,7 +75,7 @@ class HouseItemPage extends PureComponent {
             <span>Ancestral Weapons: { !checkArrayEmpty(house.ancestralWeapons) 
               ? house.ancestralWeapons.join(', ') : 'None' }</span>
             <Link to={{
-              pathname: `/houses/${this.props.match.params.houseId}/sworn-members`,
+              pathname: `/houses/${houseId}/sworn-members`,
               state: { 
                 swornMembers: house.swornMembers,
                 houseName: house.name
@@ -86,4 +92,32 @@ class HouseItemPage extends PureComponent {
   }
 }
 
-export default HouseItemPage;
+/*
+ * {selectedHouse} - the current house information
+ * {selectedHouseLoading} - loading state of the api request for the house 
+ * {selectedHouseError} - api error
+ */
+HouseItemPage.propTypes = {
+  selectedHouse: PropTypes.object,
+  selectedHouseLoading: PropTypes.bool,
+  selectedHouseError: PropTypes.object
+};
+
+const mapStateToProps = state => {
+  return {
+    selectedHouse: state.houses.selectedHouse,
+    selectedHouseLoading: state.houses.selectedHouseLoading,
+    selectedHouseError: state.houses.selectedHouseError,
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    requestHouse: (houseId) => dispatch({ 
+      type: 'GET_HOUSE', 
+      houseId
+    })
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(HouseItemPage);

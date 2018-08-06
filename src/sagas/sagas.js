@@ -49,12 +49,35 @@ function* fetchHouses(dispatch) {
   }
 }
 
+// FETCH A SINGLE HOUSE 
+const selectedHouseSaga = takeLatest('GET_HOUSE', fetchHouse);
+
+function fetchHouseRequest(houseId) {
+  return axios({
+    method: 'get',
+    url: `https://www.anapioficeandfire.com/api/houses/${houseId}`
+  });
+}
+
+function* fetchHouse(dispatch) {
+  try {
+    const houseId = dispatch.houseId;
+    const response = yield call(fetchHouseRequest, houseId);
+    const house = response.data;
+
+    yield put({type: 'GET_HOUSE_SUCCESS', house});
+  } catch (e) {
+    yield put({type: 'GET_HOUSE_FAILURE', e});
+  }
+}
+
 /*
  * ROOT SAGA 
  */
 export default function* rootSaga() {
 	 yield all([
     	bookSaga,
-      houseSaga
+      houseSaga,
+      selectedHouseSaga
     ])
 }

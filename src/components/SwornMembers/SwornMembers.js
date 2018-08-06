@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import { connect } from 'react-redux';
 import { bindAll } from 'lodash';
 import PropTypes from 'prop-types';
 import axios from 'axios';
@@ -14,7 +15,9 @@ class SwornMembers extends PureComponent {
     super(props);
 
     bindAll(this, [
-      '_renderSwornMembers'
+      '_renderSwornMembers',
+      '_renderError',
+      '_renderHouseLink'
     ]);
 
     this.state = {
@@ -26,7 +29,10 @@ class SwornMembers extends PureComponent {
 
   componentDidMount() {
     // render the swornMembers object passed from the link
-    const { state } = this.props.location;
+    const { requestHouse, location: { state }, 
+            match: { params: { houseId } } 
+          } = this.props;
+
     if(state) {
       this.setState({
         swornMembers: state.swornMembers, 
@@ -34,44 +40,82 @@ class SwornMembers extends PureComponent {
       });
     // otherwise direct link, so send the request to get the house data
     } else {
-      const houseId = this.props.match.params.houseId;
-
-      axios.get(`https://www.anapioficeandfire.com/api/houses/${houseId}`)
-      .then((res) => {
-        console.log(res);
-        const swornMembers = res.data.swornMembers;
-        const houseName = res.data.name;
-        this.setState({ 
-          swornMembers, 
-          houseName 
-        });
-      }).catch((err) => {
-        this.setState({ error: `Error fetching sworn members from house ${houseId}`});
-      });
+      const houseId = houseId;
+      requestHouse(houseId);
     }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { selectedHouse, selectedHouseError } = nextProps; 
+
+    if(selectedHouse) {
+      this.setState({
+        swornMembers: selectedHouse.swornMembers,
+        houseName: selectedHouse.name
+      });
+    } else if(selectedHouseError) {
+        this.setState({error: selectedHouseError});
+    }
+  }
+
+  /* the sworn members array from the api is a list of urls
+   * this function will dispatch an action to fetch all those urls
+   */
+  _fetchSwornMembers() {
+
   }
 
   _renderSwornMembers() {
     const { swornMembers } = this.state;
+
+    return (
+      <div>
+        {swornMembers.map((e) => {
+          return <CharacterCard url={e} charType="Sworn Member" />
+        })}
+      </div>
+    );
+  }
+
+  _renderError() {
+    const { error } = this.state;
+    const { houseId } = this.props.match.params;
+
+    return (
+      <div>
+        <Link to='/houses'>Back to Houses</Link>
+        <div>Error fetching Sworn Members from House { houseId }</div>
+      </div>
+    );
+  }
+
+  _renderHouseLink() {
+    const { houseName } = this.state;
+    const { houseId } = this.props.match.params;
+
+    return (
+      <Link to={`/houses/${houseId}`}>
+        { houseName }
+      </Link>
+    );
   }
 
   render() {
-    const { swornMembers, error, houseName } = this.state;
+    const { swornMembers, error } = this.state;
    
     return (
       <div className="sworn-members">
         {error &&
-          <div>
-            <Link to='/houses'>Back to Houses</Link>
-            <div>{ error }</div>
-          </div>
+          this._renderError()
         }
-        {swornMembers &&
-          <div>
-            <Link to={`/houses/${this.props.match.params.houseId}`}>
-            { houseName }</Link>
-            <div>we lit</div>
-          </div>
+        {!error &&
+          this._renderHouseLink()
+        }
+        {swornMembers && swornMembers.length !== 0 &&
+          this._renderSwornMembers()
+        }
+        {swornMembers && swornMembers.length === 0 && 
+          <div>This House has no Sworn Members</div>
         }
       </div>
     );
@@ -80,10 +124,30 @@ class SwornMembers extends PureComponent {
 
 /* {location} - object containing the passed in swornMembers object
                 which contains the array of character urls from the api
+ * {selectedHouse} - the current house for which these swornMembers are from
+ * {selectedHouseLoading} - loading state of the api request for the house 
+ * {selectedHouseError} - api error
  */
 SwornMembers.propTypes = {
-  location: PropTypes.object
+  location: PropTypes.object,
+  selectedHouse: PropTypes.object
 }
 
+const mapStateToProps = state => {
+  return {
+    selectedHouse: state.houses.selectedHouse,
+    selectedHouseLoading: state.houses.selectedHouseLoading,
+    selectedHouseError: state.houses.selectedHouseError,
+  };
+};
 
-export default SwornMembers;
+const mapDispatchToProps = dispatch => {
+  return {
+    requestHouse: (houseId) => dispatch({ 
+      type: 'GET_HOUSE', 
+      houseId
+    })
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(SwornMembers);

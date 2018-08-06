@@ -31,7 +31,7 @@ export default function bookReducer(state = initState, action) {
       newState = Object.assign({}, state, {
         loading: false,
         books: null,
-        error: action.error
+        error: action.e
       });
       break;
 

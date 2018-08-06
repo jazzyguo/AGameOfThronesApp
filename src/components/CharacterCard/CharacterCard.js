@@ -19,19 +19,25 @@ class CharacterCard extends PureComponent {
     ]);
 
     this.state = {
-      character: null
+      character: props.character,
+      loading: true
     }
   }
 
   componentWillMount() {
     // render the character object passed from the link
-    const { url } = this.props;
-    if(url){
+    const { url, character } = this.props;
+    if(url && url !== "" && !character){
       axios.get(url)
       .then((res) => {
         const character = res.data;
-        this.setState({character});
+        this.setState({character, loading: false});
+      }).catch((e) => {
+        this.setState({error: true, loading: false})
       })
+    }
+    if(url === "" || character) {
+      this.setState({loading: false});
     }
   }
 
@@ -58,15 +64,18 @@ class CharacterCard extends PureComponent {
 
 
   render() {
-    const { character } = this.state;
+    const { character, loading } = this.state;
     const { charType } = this.props;
 
     return (
       <div className="character">
-        {!character &&
+        {loading && 
+          <span>{ charType }: Loading</span>
+        }
+        {!character && !loading &&
           <div>{ charType }: None</div>
         }
-        {character &&
+        {character && !loading &&
           <div>
             <span>{ charType }: { character.name }</span>
             <InfoIcon onClick={this._showCharacterInfo} />
@@ -78,10 +87,12 @@ class CharacterCard extends PureComponent {
 }
 
 /*
- * {url} - api url to get char data
+ * {character} - object containing the character data - present if no url prop is supplied
+ * {url} - api url to get char data - present if no character prop is supplied
  * {charType} - character type
  */
 CharacterCard.propTypes = {
+  character: PropTypes.object,
   url: PropTypes.string,
   charType: PropTypes.string
 };
