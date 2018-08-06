@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import CharacterCard from '../CharacterCard/CharacterCard';
+import SwornMembersSortForm from './components/SwornMembersSortForm';
 import './SwornMembers.css';
 
 /* Displays a list of the sworn members
@@ -17,7 +18,9 @@ class SwornMembers extends PureComponent {
     bindAll(this, [
       '_renderSwornMembers',
       '_renderError',
-      '_renderHouseLink'
+      '_renderHouseLink',
+      '_handleSort',
+      '_fetchSwornMembers'
     ]);
 
     this.state = {
@@ -65,13 +68,21 @@ class SwornMembers extends PureComponent {
 
   }
 
+  _handleSort(value) {
+    console.log(value);
+
+    // sort the current state of sworn members, which should be objects 
+
+  }
+
   _renderSwornMembers() {
     const { swornMembers } = this.state;
 
     return (
       <div>
-        {swornMembers.map((e) => {
-          return <CharacterCard url={e} charType="Sworn Member" />
+        <SwornMembersSortForm onChange={this._handleSort}/>
+        {swornMembers.map((member, index) => {
+          return <CharacterCard key={index} url={member} charType="Sworn Member" />
         })}
       </div>
     );

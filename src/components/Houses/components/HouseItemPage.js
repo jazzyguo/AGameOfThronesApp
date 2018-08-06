@@ -10,37 +10,18 @@ class HouseItemPage extends PureComponent {
 
   constructor(props, context) {
     super(props);
-
-    this.state = {
-      house: null,
-      error: null
-    }
   }
 
-  componentDidMount() {
+  componentWillMount() {
     // render the house object passed from the link
-    const { requestHouse, location: { state } } = this.props;
+    const { requestHouse } = this.props;
 
-    if(state) {
-      this.setState({house: state.house});
-    // otherwise direct link, so request the house from the api
-    } else {
-      const houseId = this.props.match.params.houseId;
-      requestHouse(houseId);
-    }
-  }
-
-  componentWillReceiveProps(nextProps) {
-    const { selectedHouse, selectedHouseError } = nextProps; 
-    
-    this.setState({
-      house: selectedHouse,
-      error: selectedHouseError
-    });
+    const houseId = this.props.match.params.houseId;
+    requestHouse(houseId);
   }
 
   render() {
-    const { house, error } = this.state;
+    const { house, loading, error } = this.props;
     const { houseId } = this.props.match.params;
 
     return (
@@ -57,7 +38,7 @@ class HouseItemPage extends PureComponent {
           <div>Error fetching house { houseId }</div>
         }
         {/* House Info if loaded*/}
-        {house &&
+        {house && !loading &&
           <div className="houses__page-info">
             <span>{ house.name }</span>
             <span>Region: { house.region }  </span>
@@ -84,7 +65,7 @@ class HouseItemPage extends PureComponent {
           </div>
         }
         {/* Loading State */}
-        {!house && !error &&
+        {loading &&
           <div>LOADING HOUSE INFO</div>
         }
       </div>
@@ -105,9 +86,9 @@ HouseItemPage.propTypes = {
 
 const mapStateToProps = state => {
   return {
-    selectedHouse: state.houses.selectedHouse,
-    selectedHouseLoading: state.houses.selectedHouseLoading,
-    selectedHouseError: state.houses.selectedHouseError,
+    house: state.houses.selectedHouse,
+    loading: state.houses.selectedHouseLoading,
+    error: state.houses.selectedHouseError,
   };
 };
 
