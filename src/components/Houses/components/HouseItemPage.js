@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import axios from 'axios';
+import { checkArrayEmpty } from '../../../util/helpers';
 import CharacterCard from '../../CharacterCard/CharacterCard';
 
 class HouseItemPage extends PureComponent {  
@@ -34,18 +35,6 @@ class HouseItemPage extends PureComponent {
     }
   }
 
-  /* The api returns an array of length 1 with a null element if no results are found
-   * Checks for this
-   * @ {return} - boolean if the response is actually empty
-   */
-  _checkArrayEmpty(array) {
-    if(array.length > 1) {
-      return false;
-    } else if(array[0] === "") {
-      return true;
-    }
-  }
-
   render() {
     const { house, error } = this.state;
 
@@ -66,7 +55,7 @@ class HouseItemPage extends PureComponent {
         {house &&
           <div className="houses__page-info">
             <span>{ house.name }</span>
-            <span>Region: { house.region }</span>
+            <span>Region: { house.region }  </span>
             <span>Coat of Arms: { house.coatOfArms }</span>
             <span>{ house.words }</span>
             <CharacterCard url={house.founder} charType="Founder" />
@@ -74,11 +63,11 @@ class HouseItemPage extends PureComponent {
             <span>Died out: { house.diedOut ? house.diedOut : 'N/A' }</span>
             <CharacterCard url={house.currentLord} charType="Current Lord" />
             <CharacterCard url={house.heir} charType="Heir" />
-            <span>Titles: { !this._checkArrayEmpty(house.titles) 
+            <span>Titles: { !checkArrayEmpty(house.titles) 
               ? house.titles.join(', ') : 'None'}</span>
-            <span>Seats: { !this._checkArrayEmpty(house.seats) 
+            <span>Seats: { !checkArrayEmpty(house.seats) 
               ? house.seats.join(', ') : 'None' }</span>
-            <span>Ancestral Weapons: { !this._checkArrayEmpty(house.ancestralWeapons) 
+            <span>Ancestral Weapons: { !checkArrayEmpty(house.ancestralWeapons) 
               ? house.ancestralWeapons.join(', ') : 'None' }</span>
           </div>
         }
@@ -90,6 +79,5 @@ class HouseItemPage extends PureComponent {
     );
   }
 }
-
 
 export default HouseItemPage;

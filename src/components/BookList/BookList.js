@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { bindAll } from 'lodash';
 import Navbar from '../Navbar/Navbar';
-import BookListItem from './BookListItem';
-import BookSortForm from './BookSortForm';
+import BookListItem from './components/BookListItem';
+import BookSortForm from './components/BookSortForm';
 import './BookList.css';
 
 class BookList extends PureComponent {  

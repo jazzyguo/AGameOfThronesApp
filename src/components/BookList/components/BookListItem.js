@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import BookImage from './BookImage';
 import { bindAll, debounce } from 'lodash';
 import PropTypes from 'prop-types';
-import { dateToString } from '../../util/helpers';
+import { dateToString } from '../../../util/helpers';
 
 class BookListItem extends PureComponent {  
 

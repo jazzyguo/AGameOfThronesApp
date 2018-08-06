@@ -4,8 +4,11 @@ import { bindAll } from 'lodash';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import InfoIcon from '../Icon/InfoIcon';
+import './CharacterCard.css';
 
-/* Displays character information
+/* Displays the char type and the char name
+ * with a link to a modal display that contains further information
  */
 class CharacterCard extends PureComponent {  
 
@@ -13,6 +16,7 @@ class CharacterCard extends PureComponent {
     super(props);
 
     bindAll(this, [
+      '_showCharacterInfo'
     ]);
 
     this.state = {
@@ -21,7 +25,7 @@ class CharacterCard extends PureComponent {
   }
 
   componentWillMount() {
-    // render the house object passed from the link
+    // render the character object passed from the link
     const { url } = this.props;
     if(url){
       axios.get(url)
@@ -34,7 +38,7 @@ class CharacterCard extends PureComponent {
 
   /* Shows more info of the character by calling the modal
    */
-  _showOverlordInfo() {
+  _showCharacterInfo() {
     const { openModal } = this.props;
 
     openModal(this._renderModal());
@@ -44,7 +48,13 @@ class CharacterCard extends PureComponent {
   /* Renders modal content
    */
   _renderModal() {
+    const { character } = this.state;
 
+    return (
+      <div className="character__modal">
+        { character.name }
+      </div>
+    );
   }
 
 
@@ -58,7 +68,10 @@ class CharacterCard extends PureComponent {
           <div>{ charType }: None</div>
         }
         {character &&
-          <div>{ charType }: { character.name }</div>
+          <div>
+            <span>{ charType }: { character.name }</span>
+            <InfoIcon onClick={this._showCharacterInfo} />
+          </div>
         }
       </div>
     );

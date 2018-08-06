@@ -10,16 +10,27 @@ class Modal extends PureComponent {
 		super(props);
 
 		bindAll(this, [
-		  '_handleClick'
+		  '_handleClick',
+      '_escape'
 		]);
 	}	
 
 	componentDidMount() {
     document.addEventListener('mousedown', this._handleClick);
+    document.addEventListener("keydown", this._escape, false);
   }
 
   componentWillUnmount() {
     document.removeEventListener('mousedown', this._handleClick);
+    document.removeEventListener("keydown", this._escape, false);
+  }
+
+  _escape(e) {
+    const { closeModal } = this.props;
+
+    if(e.keyCode === 27) {
+      closeModal();
+    }
   }
 
   _handleClick(event) {

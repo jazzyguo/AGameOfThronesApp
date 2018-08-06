@@ -11,3 +11,15 @@ export function dateToString(dateString) {
 	const year = parseInt(dateString.split('-')[0], 10);
 	return `${months[month-1]} ${date}, ${year}`;
 }
+
+/* The api returns an array of length 1 with a null element if no results are found
+* Checks for this
+* @ {return} - boolean if the response is actually empty
+*/
+export function checkArrayEmpty(array) {
+	if(array.length > 1) {
+	  return false;
+	} else if(array[0] === "") {
+	  return true;
+	}
+}

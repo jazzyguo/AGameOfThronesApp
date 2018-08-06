@@ -4,7 +4,7 @@ import { Switch, Route } from 'react-router-dom'
 import Home from '../Home/Home';
 import BookList from '../BookList/BookList';
 import Houses from '../Houses/Houses';
-import HouseItemPage from '../Houses/HouseItem/HouseItemPage';
+import HouseItemPage from '../Houses/components/HouseItemPage';
 import Header from '../Header/Header';
 import Modal from '../Modal/Modal';
 import './App.css';
