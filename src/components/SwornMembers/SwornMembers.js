@@ -1,5 +1,4 @@
 import React, { PureComponent } from 'react';
-import { connect } from 'react-redux';
 import { bindAll } from 'lodash';
 import PropTypes from 'prop-types';
 import axios from 'axios';
@@ -15,30 +14,76 @@ class SwornMembers extends PureComponent {
     super(props);
 
     bindAll(this, [
+      '_renderSwornMembers'
     ]);
+
+    this.state = {
+      swornMembers: null,
+      houseName: null,
+      error: null
+    }
+  }
+
+  componentDidMount() {
+    // render the swornMembers object passed from the link
+    const { state } = this.props.location;
+    if(state) {
+      this.setState({
+        swornMembers: state.swornMembers, 
+        houseName: state.houseName
+      });
+    // otherwise direct link, so send the request to get the house data
+    } else {
+      const houseId = this.props.match.params.houseId;
+
+      axios.get(`https://www.anapioficeandfire.com/api/houses/${houseId}`)
+      .then((res) => {
+        console.log(res);
+        const swornMembers = res.data.swornMembers;
+        const houseName = res.data.name;
+        this.setState({ 
+          swornMembers, 
+          houseName 
+        });
+      }).catch((err) => {
+        this.setState({ error: `Error fetching sworn members from house ${houseId}`});
+      });
+    }
   }
 
   _renderSwornMembers() {
-    const { members } = this.props;
-
-    
+    const { swornMembers } = this.state;
   }
 
   render() {
+    const { swornMembers, error, houseName } = this.state;
    
     return (
       <div className="sworn-members">
-      
+        {error &&
+          <div>
+            <Link to='/houses'>Back to Houses</Link>
+            <div>{ error }</div>
+          </div>
+        }
+        {swornMembers &&
+          <div>
+            <Link to={`/houses/${this.props.match.params.houseId}`}>
+            { houseName }</Link>
+            <div>we lit</div>
+          </div>
+        }
       </div>
     );
   }
 }
 
-/*
- * {members} - array of urls fetched from the api
+/* {location} - object containing the passed in swornMembers object
+                which contains the array of character urls from the api
  */
 SwornMembers.propTypes = {
-  members: PropTypes.array
-};
+  location: PropTypes.object
+}
+
 
 export default SwornMembers;

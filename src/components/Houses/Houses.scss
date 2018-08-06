@@ -1,14 +1,14 @@
 .houses {
-	&__container {
-
-	}
-	&__item {
-		
-	}
-	&__page {
-		&-info {
-			display: flex;
-			flex-direction:column;
-		}
-	}
+    &__container {}
+    &__item {
+    	&-link {
+    		
+    	}
+    }
+    &__page {
+        &-info {
+            display: flex;
+            flex-direction: column;
+        }
+    }
 }

@@ -11,7 +11,7 @@ const HouseItem = (props) => {
   return (
     <div className="houses__item">
       { name }
-       <Link className="home__book-link" 
+       <Link className="houses__item-link" 
              to={{
                 pathname: `/houses/${houseId}`,
                 state: { 

@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import { Link } from 'react-router-dom';
-import PropTypes from 'prop-types';
 import axios from 'axios';
 import { checkArrayEmpty } from '../../../util/helpers';
 import CharacterCard from '../../CharacterCard/CharacterCard';
@@ -26,7 +25,7 @@ class HouseItemPage extends PureComponent {
       const houseId = this.props.match.params.houseId;
 
       axios.get(`https://www.anapioficeandfire.com/api/houses/${houseId}`)
-      .then(res => {
+      .then((res) => {
         const house = res.data;
         this.setState({ house });
       }).catch((err) => {
@@ -46,7 +45,7 @@ class HouseItemPage extends PureComponent {
           state: { 
             reset: false
           }
-        }}>Go Back</Link>
+        }}>Back</Link>
         {/* Show Error Message*/}
         {error &&
           <div>{ error }</div>
@@ -69,6 +68,13 @@ class HouseItemPage extends PureComponent {
               ? house.seats.join(', ') : 'None' }</span>
             <span>Ancestral Weapons: { !checkArrayEmpty(house.ancestralWeapons) 
               ? house.ancestralWeapons.join(', ') : 'None' }</span>
+            <Link to={{
+              pathname: `/houses/${this.props.match.params.houseId}/sworn-members`,
+              state: { 
+                swornMembers: house.swornMembers,
+                houseName: house.name
+              }
+            }}>Sworn Members</Link>
           </div>
         }
         {/* Loading State */}

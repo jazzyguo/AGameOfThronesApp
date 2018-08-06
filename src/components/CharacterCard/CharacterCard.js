@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { bindAll } from 'lodash';
 import PropTypes from 'prop-types';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
 import InfoIcon from '../Icon/InfoIcon';
 import './CharacterCard.css';
 
@@ -29,7 +28,7 @@ class CharacterCard extends PureComponent {
     const { url } = this.props;
     if(url){
       axios.get(url)
-      .then(res => {
+      .then((res) => {
         const character = res.data;
         this.setState({character});
       })

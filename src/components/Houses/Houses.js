@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Navbar from '../Navbar/Navbar';
 import HouseItem from './components/HouseItem';
-import HouseSortForm from './components/HouseSortForm';
+//import HouseSortForm from './components/HouseSortForm';
 import Pagination from '../Pagination/Pagination';
 import { bindAll } from 'lodash';
 import './Houses.css';
@@ -110,7 +110,8 @@ Houses.propTypes = {
   loading: PropTypes.bool,
   page: PropTypes.number,
   houses: PropTypes.array,
-  error: PropTypes.string
+  error: PropTypes.string,
+  resetHouses: PropTypes.bool
 };
 
 const mapStateToProps = state => {

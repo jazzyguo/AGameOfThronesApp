@@ -82,6 +82,7 @@ class Pagination extends PureComponent {
 
      window.scrollBy(0, -step);
      if(d.scrollTop === 0) {
+       // eslint-disable-next-line
        clearTimeout(scroll);
        return;
      }

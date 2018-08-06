@@ -54,6 +54,7 @@ class BookList extends PureComponent {
     // sort current data
     let { sortedBooks } = this.state
     if(sortBy === 'numberOfPages') {
+      // eslint-disable-next-line
       switch(order) {
         case 'asc':
           sortedBooks.sort((a, b) => { return a.numberOfPages - b.numberOfPages})
@@ -64,6 +65,7 @@ class BookList extends PureComponent {
       }
     }
     if(sortBy === 'released') {
+      // eslint-disable-next-line
       switch(order) {
         case 'asc':
           sortedBooks.sort((a, b) => { return new Date(a.released) - new Date(b.released)})

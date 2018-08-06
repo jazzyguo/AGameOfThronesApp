@@ -7,6 +7,7 @@ import Houses from '../Houses/Houses';
 import HouseItemPage from '../Houses/components/HouseItemPage';
 import Header from '../Header/Header';
 import Modal from '../Modal/Modal';
+import SwornMembers from '../SwornMembers/SwornMembers';
 import './App.css';
 
 class App extends PureComponent {  
@@ -28,7 +29,8 @@ class App extends PureComponent {
           <Route exact path='/' component={Home}/>
           <Route path='/books' component={BookList}/>
           <Route exact path='/houses' component={Houses}/>
-          <Route path='/houses/:houseId' component={HouseItemPage}/>
+          <Route exact path='/houses/:houseId' component={HouseItemPage}/>
+          <Route exact path='/houses/:houseId/sworn-members' component={SwornMembers}/>
         </Switch>
       </div>
     );
