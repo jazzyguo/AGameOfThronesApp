@@ -40,7 +40,7 @@ class CharacterCard extends PureComponent {
       this.setState({loading: false});
     }
   }
-
+  
   /* Shows more info of the character by calling the modal
    */
   _showCharacterInfo() {

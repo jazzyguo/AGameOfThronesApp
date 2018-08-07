@@ -71,6 +71,25 @@ function* fetchHouse(dispatch) {
   }
 }
 
+// Fetch sworn members
+const membersSaga = takeLatest('GET_MEMBERS', fetchMembers);
+
+function* fetchMembers(dispatch) {
+  try {
+    let members;
+    const memberURLArray = dispatch.members;
+    const houseId = dispatch.houseId;
+
+    members = yield all(memberURLArray.map(url => {
+      return axios.get(url).then(res => res.data)
+    }));
+
+    yield put({type: 'GET_MEMBERS_SUCCESS', members, houseId});
+  } catch (e) {
+    yield put({type: 'GET_MEMBERS_FAILURE', e});
+  }
+}
+
 /*
  * ROOT SAGA 
  */
@@ -78,6 +97,7 @@ export default function* rootSaga() {
 	 yield all([
     	bookSaga,
       houseSaga,
-      selectedHouseSaga
+      selectedHouseSaga,
+      membersSaga
     ])
 }

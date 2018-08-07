@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+import { bindAll } from 'lodash';
 import PropTypes from 'prop-types';
 import { checkArrayEmpty } from '../../../util/helpers';
 import CharacterCard from '../../CharacterCard/CharacterCard';
@@ -10,14 +10,30 @@ class HouseItemPage extends PureComponent {
 
   constructor(props, context) {
     super(props);
+
+    bindAll(this, [
+      '_renderHouseInfo'
+    ]);
   }
 
   componentWillMount() {
     // render the house object passed from the link
-    const { requestHouse } = this.props;
-
+    const { requestHouse, house } = this.props;
     const houseId = this.props.match.params.houseId;
-    requestHouse(houseId);
+    if(!house) {
+      requestHouse(houseId);
+    } else {
+      const idRegex = /[0-9]+/;
+      const urlHouseId = house.url.match(idRegex)[0];
+      // no reason to request from the api if we already have the same house in store
+      if(houseId !== urlHouseId) {
+        requestHouse(houseId);
+      }
+    }
+  }
+
+  _renderHouseInfo(house) {
+
   }
 
   render() {
@@ -32,7 +48,7 @@ class HouseItemPage extends PureComponent {
           state: { 
             reset: false
           }
-        }}>Back</Link>
+        }}>Back to Houses</Link>
         {/* Show Error Message*/}
         {error &&
           <div>Error fetching house { houseId }</div>
@@ -59,7 +75,8 @@ class HouseItemPage extends PureComponent {
               pathname: `/houses/${houseId}/sworn-members`,
               state: { 
                 swornMembers: house.swornMembers,
-                houseName: house.name
+                houseName: house.name,
+                houseId
               }
             }}>Sworn Members</Link>
           </div>

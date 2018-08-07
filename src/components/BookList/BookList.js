@@ -16,16 +16,21 @@ class BookList extends PureComponent {
       '_handleSort'
     ]);
 
-    // default sort is by oldest
     this.state = {
       sortedBooks: null
     }
   }
 
   componentWillMount() {
-    const { requestBooks } = this.props;
-
-    requestBooks();
+    const { requestBooks, books } = this.props;
+    if(!books) {
+      requestBooks();
+    } else {
+      // default sort is by oldest
+      this.setState({
+        sortedBooks: books  
+      }, () => {this._handleSort()});
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -47,12 +52,18 @@ class BookList extends PureComponent {
         released || numberOfPages : asc||desc
    * Able to sort by date released, and the number of pages
    */
-  _handleSort(value) {
-    const values = value.booksort.split(':');
-    const sortBy = values[0];
-    const order = values[1];
-    // sort current data
-    let { sortedBooks } = this.state
+  _handleSort(value = 'oldest') {
+    let { sortedBooks } = this.state;
+    let sortBy;
+    let order;
+    if(value === 'oldest') {
+      sortBy = 'released';
+      order = 'asc';
+    } else {
+      const values = value.booksort.split(':');
+      sortBy = values[0];
+      order = values[1];
+    }
     if(sortBy === 'numberOfPages') {
       // eslint-disable-next-line
       switch(order) {

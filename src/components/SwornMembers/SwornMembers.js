@@ -2,7 +2,6 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { bindAll } from 'lodash';
 import PropTypes from 'prop-types';
-import axios from 'axios';
 import { Link } from 'react-router-dom';
 import CharacterCard from '../CharacterCard/CharacterCard';
 import SwornMembersSortForm from './components/SwornMembersSortForm';
@@ -24,40 +23,51 @@ class SwornMembers extends PureComponent {
     ]);
 
     this.state = {
+      swornMembersUrls: null,
       swornMembers: null,
       houseName: null,
       error: null
     }
   }
 
-  componentDidMount() {
-    // render the swornMembers object passed from the link
-    const { requestHouse, location: { state }, 
-            match: { params: { houseId } } 
-          } = this.props;
-
-    if(state) {
+  componentWillMount() {
+    const { requestHouse, requestMembers, location, 
+      members, selectedHouse, membersHouseId } = this.props;
+    const houseId = this.props.match.params.houseId;
+    // if this is a new house, then fetch all the needed data
+    if(location.state && (houseId !== membersHouseId)) {
       this.setState({
-        swornMembers: state.swornMembers, 
-        houseName: state.houseName
-      });
-    // otherwise direct link, so send the request to get the house data
-    } else {
-      const houseId = houseId;
+        houseName: location.state.houseName,
+        swornMembersUrls: location.state.swornMembers
+      }, () => { requestMembers(this.state.swornMembersUrls, houseId) });
+    // use the data if its already stored
+    } else if(location.state && members && selectedHouse){
+      this.setState({
+        swornMembers: members, 
+        houseName: selectedHouse.name
+      })
+      // else direct link, so just fetch all the needed data
+    } else if(!location.state && !members && !selectedHouse){
       requestHouse(houseId);
     }
   }
 
   componentWillReceiveProps(nextProps) {
-    const { selectedHouse, selectedHouseError } = nextProps; 
-
-    if(selectedHouse) {
+    const { selectedHouse, selectedHouseError, members } = nextProps; 
+    const { requestMembers, membersHouseId } = this.props;
+    const houseId = this.props.match.params.houseId;
+    // get new members on new house
+    if(selectedHouse && (membersHouseId !== houseId)) {
       this.setState({
-        swornMembers: selectedHouse.swornMembers,
-        houseName: selectedHouse.name
-      });
+        houseName: selectedHouse.name,
+        swornMembersUrls: selectedHouse.swornMembers
+      }, () => { requestMembers(this.state.swornMembersUrls, houseId) });
     } else if(selectedHouseError) {
         this.setState({error: selectedHouseError});
+    }
+    // store fetched members in state
+    if(members) {
+      this.setState({swornMembers: members});
     }
   }
 
@@ -80,16 +90,18 @@ class SwornMembers extends PureComponent {
 
     return (
       <div>
-        <SwornMembersSortForm onChange={this._handleSort}/>
+        {swornMembers.length > 1 &&
+          <SwornMembersSortForm onChange={this._handleSort}/>
+        }
         {swornMembers.map((member, index) => {
-          return <CharacterCard key={index} url={member} charType="Sworn Member" />
+          return <CharacterCard key={index} character={member} 
+                                charType="Sworn Member" />
         })}
       </div>
     );
   }
 
   _renderError() {
-    const { error } = this.state;
     const { houseId } = this.props.match.params;
 
     return (
@@ -105,15 +117,14 @@ class SwornMembers extends PureComponent {
     const { houseId } = this.props.match.params;
 
     return (
-      <Link to={`/houses/${houseId}`}>
-        { houseName }
-      </Link>
+      <Link to={`/houses/${houseId}`}>Back to { houseName }</Link>
     );
   }
 
   render() {
     const { swornMembers, error } = this.state;
-   
+    const { loading } = this.props;
+
     return (
       <div className="sworn-members">
         {error &&
@@ -122,10 +133,13 @@ class SwornMembers extends PureComponent {
         {!error &&
           this._renderHouseLink()
         }
-        {swornMembers && swornMembers.length !== 0 &&
+        {loading &&
+          <div>LOADING!</div>
+        }
+        {!loading && swornMembers && swornMembers.length !== 0 &&
           this._renderSwornMembers()
         }
-        {swornMembers && swornMembers.length === 0 && 
+        {!loading && swornMembers && swornMembers.length === 0 && 
           <div>This House has no Sworn Members</div>
         }
       </div>
@@ -138,10 +152,18 @@ class SwornMembers extends PureComponent {
  * {selectedHouse} - the current house for which these swornMembers are from
  * {selectedHouseLoading} - loading state of the api request for the house 
  * {selectedHouseError} - api error
+ * {members} - array of character objects
+ * {loading} - members loading flag
+ * {error} - members error object
+ * {houseId} - houseId associated with sworn members
  */
 SwornMembers.propTypes = {
   location: PropTypes.object,
-  selectedHouse: PropTypes.object
+  selectedHouse: PropTypes.object,
+  members: PropTypes.array,
+  loading: PropTypes.bool,
+  error: PropTypes.object,
+  houseId: PropTypes.number
 }
 
 const mapStateToProps = state => {
@@ -149,6 +171,10 @@ const mapStateToProps = state => {
     selectedHouse: state.houses.selectedHouse,
     selectedHouseLoading: state.houses.selectedHouseLoading,
     selectedHouseError: state.houses.selectedHouseError,
+    members: state.members.members,
+    loading: state.members.loading,
+    error: state.members.error,
+    membersHouseId: state.members.houseId
   };
 };
 
@@ -156,6 +182,11 @@ const mapDispatchToProps = dispatch => {
   return {
     requestHouse: (houseId) => dispatch({ 
       type: 'GET_HOUSE', 
+      houseId
+    }),
+    requestMembers: (members, houseId) => dispatch({
+      type: 'GET_MEMBERS',
+      members,
       houseId
     })
   };

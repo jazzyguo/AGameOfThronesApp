@@ -9,12 +9,14 @@ import {createStore, applyMiddleware, combineReducers, compose} from 'redux';
 import createSagaMiddleware from 'redux-saga';
 import bookReducer from './reducers/bookReducer';
 import houseReducer from './reducers/houseReducer';
+import swornMembersReducer from './reducers/swornMembersReducer';
 import modalReducer from './reducers/modalReducer';
 import rootSaga from './sagas/sagas';
 
 const _reducers = combineReducers({
 	books: bookReducer,
   houses: houseReducer,
+  members: swornMembersReducer,
   modal: modalReducer,
   form: formReducer
 });
