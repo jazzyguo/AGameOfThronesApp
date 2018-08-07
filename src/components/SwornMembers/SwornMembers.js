@@ -104,7 +104,6 @@ class SwornMembers extends PureComponent {
           <SwornMembersFilterForm onChange={this._handleFilter}/>
         }
         {toRender.map((member, index) => {
-          console.log(member);
           return <CharacterCard key={index} character={member} 
                                 charType="Sworn Member" />
         })}
