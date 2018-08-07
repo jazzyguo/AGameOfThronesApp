@@ -1,10 +1,10 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { bindAll } from 'lodash';
+import { bindAll, pickBy, values } from 'lodash';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import CharacterCard from '../CharacterCard/CharacterCard';
-import SwornMembersSortForm from './components/SwornMembersSortForm';
+import SwornMembersFilterForm from './components/SwornMembersFilterForm';
 import './SwornMembers.css';
 
 /* Displays a list of the sworn members
@@ -18,13 +18,13 @@ class SwornMembers extends PureComponent {
       '_renderSwornMembers',
       '_renderError',
       '_renderHouseLink',
-      '_handleSort',
-      '_fetchSwornMembers'
+      '_handleFilter'
     ]);
 
     this.state = {
       swornMembersUrls: null,
       swornMembers: null,
+      filteredMembers: null,
       houseName: null,
       error: null
     }
@@ -71,29 +71,40 @@ class SwornMembers extends PureComponent {
     }
   }
 
-  /* the sworn members array from the api is a list of urls
-   * this function will dispatch an action to fetch all those urls
+  /* Filters sworn members
    */
-  _fetchSwornMembers() {
-
-  }
-
-  _handleSort(value) {
-    console.log(value);
-
-    // sort the current state of sworn members, which should be objects 
-
+  _handleFilter(value) {
+    const filter = value.sm_filter;
+    let { swornMembers } = this.state;
+    let filteredMembers = swornMembers;
+    // uses lodash pickBy to filter the current object
+    if(filter === 'all') {
+      this.setState({filteredMembers: null});
+      return;      
+    } else if (filter === 'male') {
+        filteredMembers = pickBy(filteredMembers, (char) => {
+          return char.gender === 'Male';
+        });
+    } else if (filter === 'female') {
+        filteredMembers = pickBy(filteredMembers, (char) => {
+          return char.gender === 'Female';
+        });    
+    }
+    // converts the filtered object into an array
+    this.setState({filteredMembers: values(filteredMembers)});
   }
 
   _renderSwornMembers() {
-    const { swornMembers } = this.state;
-
+    const { filteredMembers, swornMembers } = this.state;
+    // if there is a filter applied, then render that, else render all
+    let toRender = filteredMembers ? filteredMembers : swornMembers;
     return (
-      <div>
-        {swornMembers.length > 1 &&
-          <SwornMembersSortForm onChange={this._handleSort}/>
+      <div className="sworn-members__list">
+        {toRender.length > 1 &&
+          <SwornMembersFilterForm onChange={this._handleFilter}/>
         }
-        {swornMembers.map((member, index) => {
+        {toRender.map((member, index) => {
+          console.log(member);
           return <CharacterCard key={index} character={member} 
                                 charType="Sworn Member" />
         })}

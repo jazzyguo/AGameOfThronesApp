@@ -26,7 +26,7 @@ const HouseItem = (props) => {
 
 /*
  * {openModal} - dispatches open modal
- * {house} - object containing the book data
+ * {house} - object containing the house data
  */
 HouseItem.propTypes = {
   openModal: PropTypes.func,

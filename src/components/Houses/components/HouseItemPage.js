@@ -33,7 +33,39 @@ class HouseItemPage extends PureComponent {
   }
 
   _renderHouseInfo(house) {
+    const { name, region, coatOfArms, words, founder, 
+      founded, diedOut, currentLord,heir, titles, 
+      seats, ancestralWeapons, swornMembers
+    } = house;
+    const { houseId } = this.props.match.params;
 
+    return (
+      <div className="houses__page-info">
+        <span>{ name }</span>
+        <span>Region: { region }  </span>
+        <span>Coat of Arms: { coatOfArms }</span>
+        <span>{ words }</span>
+        <CharacterCard url={ founder } charType="Founder" />
+        <span>Founded in { founded ? founded : 'N/A' }</span>
+        <span>Died out: { diedOut ? diedOut : 'N/A' }</span>
+        <CharacterCard url={ currentLord } charType="Current Lord" />
+        <CharacterCard url={ heir } charType="Heir" />
+        <span>Titles: { !checkArrayEmpty(titles) 
+          ? titles.join(', ') : 'None'}</span>
+        <span>Seats: { !checkArrayEmpty(seats) 
+          ? seats.join(', ') : 'None' }</span>
+        <span>Ancestral Weapons: { !checkArrayEmpty(ancestralWeapons) 
+          ? ancestralWeapons.join(', ') : 'None' }</span>
+        <Link to={{
+          pathname: `/houses/${houseId}/sworn-members`,
+          state: { 
+            swornMembers: swornMembers,
+            houseName: name,
+            houseId
+          }
+        }}>Sworn Members</Link>
+      </div>
+    );
   }
 
   render() {
@@ -55,31 +87,7 @@ class HouseItemPage extends PureComponent {
         }
         {/* House Info if loaded*/}
         {house && !loading &&
-          <div className="houses__page-info">
-            <span>{ house.name }</span>
-            <span>Region: { house.region }  </span>
-            <span>Coat of Arms: { house.coatOfArms }</span>
-            <span>{ house.words }</span>
-            <CharacterCard url={house.founder} charType="Founder" />
-            <span>Founded in { house.founded ? house.founded : 'N/A' }</span>
-            <span>Died out: { house.diedOut ? house.diedOut : 'N/A' }</span>
-            <CharacterCard url={house.currentLord} charType="Current Lord" />
-            <CharacterCard url={house.heir} charType="Heir" />
-            <span>Titles: { !checkArrayEmpty(house.titles) 
-              ? house.titles.join(', ') : 'None'}</span>
-            <span>Seats: { !checkArrayEmpty(house.seats) 
-              ? house.seats.join(', ') : 'None' }</span>
-            <span>Ancestral Weapons: { !checkArrayEmpty(house.ancestralWeapons) 
-              ? house.ancestralWeapons.join(', ') : 'None' }</span>
-            <Link to={{
-              pathname: `/houses/${houseId}/sworn-members`,
-              state: { 
-                swornMembers: house.swornMembers,
-                houseName: house.name,
-                houseId
-              }
-            }}>Sworn Members</Link>
-          </div>
+          this._renderHouseInfo(house)
         }
         {/* Loading State */}
         {loading &&
