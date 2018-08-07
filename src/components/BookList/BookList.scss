@@ -6,6 +6,7 @@
         grid-template-columns: repeat(12, 1fr);
         grid-row-gap: 40px;
         justify-content: center;
+        padding-bottom: 15px;
     }
     &__item {
         display: flex;
@@ -42,8 +43,10 @@
             }
         }
         &-info {
-            padding: 15px 10px;
+            @include ACFont();
+            padding: 10px 10px 0;
             text-align: center;
+            font-size: 26px;
         }
     }
     &__sort {
@@ -81,17 +84,19 @@
             width: 100%;
             max-width: 225px;
             .title {
+                @include GoTFont();
                 font-size: 24px;
                 font-weight: bold;
+                margin-bottom: 10px;
             }
             .isbn {
                 font-size: 14px;
             }
             .authors {
-            	margin-top: 25px;
+                margin-top: 25px;
             }
             .publisher {
-            	margin-top: 25px;
+                margin-top: 25px;
             }
             .notes {
                 margin-top: 5px;

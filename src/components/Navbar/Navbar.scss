@@ -1,13 +1,18 @@
 @import '../../../public/styles/global-styles';
-
 .navbar {
-	display: flex;
-	justify-content: center;
-	margin-bottom: 50px;
-	&__link {
-		margin: 0 15px;	
-		&--selected {
-			color: gold;
-		}
-	}
+    display: flex;
+    justify-content: center;
+    margin: 0 auto 50px;
+    width: 100%;
+    display: flex;
+    max-width: 320px;
+    justify-content: space-around;
+    &__link {
+        @include ACFont();
+        font-size: 26px;
+        text-transform: uppercase;
+        &--selected {
+            color: color(gold);
+        }
+    }
 }

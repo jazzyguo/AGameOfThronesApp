@@ -5,6 +5,7 @@ import { bindAll } from 'lodash';
 import Navbar from '../Navbar/Navbar';
 import BookListItem from './components/BookListItem';
 import BookSortForm from './components/BookSortForm';
+import Loader from '../Loader/Loader';
 import './BookList.css';
 
 class BookList extends PureComponent {  
@@ -99,7 +100,7 @@ class BookList extends PureComponent {
         <div className="book-list__container">
           <BookSortForm onChange={ this._handleSort }/>
           { loading &&
-            'LOADING!!'
+            <Loader />
           }
           { !loading && !error && sortedBooks &&
             this._renderBookList()

@@ -9,16 +9,15 @@ const HouseItem = (props) => {
   const houseId = url.match(idRegex);
 
   return (
-    <div className="houses__item">
-      { name }
+    <div class="houses__item-container">
        <Link className="houses__item-link" 
              to={{
                 pathname: `/houses/${houseId}`,
                 state: { 
                   house
                 }
-              }}>
-            More Info
+              }}> 
+        <div class="houses__item">{ name }</div>
       </Link>
     </div>
   );

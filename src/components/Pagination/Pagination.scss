@@ -21,7 +21,7 @@
             width: 30px;
             height: 30px;
             cursor: pointer;
-            fill: color(secondary);
+            fill: color(gold);
             margin: auto;
             @include breakpoint-min(md) {
                 width: 40px;
@@ -40,16 +40,16 @@
     &__item {
         cursor: pointer;
         @include hover-supported() {
-            color: color(secondary);
+            color: color(gold);
         }
         &--selected {
-            color: color(secondary);
+            color: color(gold);
         }
     }
     &__next, &__prev {
         cursor: pointer;
         @include hover-supported() {
-            color: color(secondary);
+            color: color(gold);
         }
     }
 }

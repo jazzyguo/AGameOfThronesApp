@@ -5,6 +5,7 @@ import { bindAll } from 'lodash';
 import PropTypes from 'prop-types';
 import { checkArrayEmpty } from '../../../util/helpers';
 import CharacterCard from '../../CharacterCard/CharacterCard';
+import Loader from '../../Loader/Loader';
 
 class HouseItemPage extends PureComponent {  
 
@@ -41,7 +42,7 @@ class HouseItemPage extends PureComponent {
 
     return (
       <div className="houses__page-info">
-        <span>{ name }</span>
+        <span className="name">{ name }</span>
         <span>Region: { region }  </span>
         <span>Coat of Arms: { coatOfArms }</span>
         <span>{ words }</span>
@@ -91,7 +92,7 @@ class HouseItemPage extends PureComponent {
         }
         {/* Loading State */}
         {loading &&
-          <div>LOADING HOUSE INFO</div>
+          <Loader />
         }
       </div>
     );

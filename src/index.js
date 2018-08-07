@@ -5,7 +5,8 @@ import { reducer as formReducer } from 'redux-form';
 import { render } from 'react-dom';
 import { BrowserRouter, Route } from 'react-router-dom'
 import App from './components/App/App';
-import {createStore, applyMiddleware, combineReducers, compose} from 'redux';
+import {createStore, applyMiddleware, combineReducers } from 'redux';
+import { composeWithDevTools } from 'redux-devtools-extension/developmentOnly';
 import createSagaMiddleware from 'redux-saga';
 import bookReducer from './reducers/bookReducer';
 import houseReducer from './reducers/houseReducer';
@@ -23,12 +24,11 @@ const _reducers = combineReducers({
 
 const sagaMiddleware = createSagaMiddleware();
 
-const reduxDevTools = 
-	window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__();
-
 const store = createStore(
 	_reducers,
-	compose(applyMiddleware(sagaMiddleware), reduxDevTools)
+  composeWithDevTools(
+    applyMiddleware(sagaMiddleware)  
+  )
 );
 
 sagaMiddleware.run(rootSaga);

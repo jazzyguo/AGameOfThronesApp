@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import Navbar from '../Navbar/Navbar';
 import HouseItem from './components/HouseItem';
 //import HouseSortForm from './components/HouseSortForm';
+import Loader from '../Loader/Loader';
 import Pagination from '../Pagination/Pagination';
 import { bindAll } from 'lodash';
 import './Houses.css';
@@ -78,7 +79,7 @@ class Houses extends PureComponent {
         <div className="houses__container">
           { /*<HouseSortForm onChange={ this._handleSort }/> */ }
           { loading &&
-            'LOADING!!'
+            <Loader />
           }
           { !loading && !error && sortedHouses &&
             this._renderHouses()

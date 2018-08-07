@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import CharacterCard from '../CharacterCard/CharacterCard';
 import SwornMembersFilterForm from './components/SwornMembersFilterForm';
+import Loader from '../Loader/Loader';
 import './SwornMembers.css';
 
 /* Displays a list of the sworn members
@@ -144,7 +145,7 @@ class SwornMembers extends PureComponent {
           this._renderHouseLink()
         }
         {loading &&
-          <div>LOADING!</div>
+          <Loader />
         }
         {!loading && swornMembers && swornMembers.length !== 0 &&
           this._renderSwornMembers()
@@ -165,7 +166,7 @@ class SwornMembers extends PureComponent {
  * {members} - array of character objects
  * {loading} - members loading flag
  * {error} - members error object
- * {houseId} - houseId associated with sworn members
+ * {membersHouseId} - houseId associated with sworn members
  */
 SwornMembers.propTypes = {
   location: PropTypes.object,
@@ -173,7 +174,7 @@ SwornMembers.propTypes = {
   members: PropTypes.array,
   loading: PropTypes.bool,
   error: PropTypes.object,
-  houseId: PropTypes.number
+  membersHouseId: PropTypes.number
 }
 
 const mapStateToProps = state => {

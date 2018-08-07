@@ -1,5 +1,7 @@
+@import '../../../public/styles/global-styles';
 .header {
-	text-align: center;
-	font-size: 46px;
-	padding: 10px 0;
+    @include GoTFont();
+    text-align: center;
+    font-size: 30px;
+    padding: 10px 0 25px;
 }

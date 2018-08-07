@@ -12,8 +12,9 @@ const NavBar = (props) => {
             to='/books'>
             Books
       </Link>
-      <Link className="navbar__link" to='/'>
-            Home
+      <Link className={`navbar__link ${ pathname === '/' ? 'navbar__link--selected' : '' }`} 
+            to='/'>
+            hOME
       </Link>
       <Link className={`navbar__link ${ pathname.includes('houses') ? 'navbar__link--selected' : '' }`}
             to='/houses'>

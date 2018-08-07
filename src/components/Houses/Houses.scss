@@ -1,14 +1,40 @@
+@import '../../../public/styles/global-styles';
 .houses {
-    &__container {}
+    &__container {
+        padding-bottom: 50px;
+    }
     &__item {
-    	&-link {
-    		
-    	}
+        font-size: 24px;
+        width: 300px;
+        max-width: 90%;
+        text-align: center;
+        background-color: color(secondary);
+        margin: 15px auto;
+        cursor: pointer;
+        padding: 10px;
+        &-link {
+            @include ACFont();
+            width: 100%;
+        }
+        &-container {
+            width: max-content;
+            max-width: 100%;
+            margin: auto;
+        }
+        &:hover {
+            a {
+                color: color(gold);
+            }
+        }
     }
     &__page {
         &-info {
             display: flex;
             flex-direction: column;
+            .name {
+                font-weight: bold;
+                font-size: 20px;
+            }
         }
     }
 }

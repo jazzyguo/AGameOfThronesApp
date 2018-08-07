@@ -4,6 +4,12 @@
     top: 50%;
     transform: translate(-50%, -50%);
 }
+@mixin GoTFont() {
+    font-family: 'GOT', Helvetica, sans-serif;
+}
+@mixin ACFont() {
+    font-family: 'AC', Helvetica, sans-serif;
+}
 // creates media query
 @mixin breakpoint-min($size: '') {
     @if ($size !='') {

@@ -1,5 +1,6 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import { Link } from 'react-router-dom';
+import Navbar from '../Navbar/Navbar';
 import './Home.css';
 
 class Home extends PureComponent {  
@@ -10,14 +11,12 @@ class Home extends PureComponent {
 
   render() {
     return (
-      <div className="home__container">
-        <Link className="home__book-link" to='/books'>
-              Books
-        </Link>
-        <Link className="home__houses-link" to='/houses'>
-              Houses
-        </Link>
-      </div>
+      <Fragment>
+        <Navbar/>
+        <div className="home__container">
+
+        </div>
+      </Fragment>
     );
   }
 }
