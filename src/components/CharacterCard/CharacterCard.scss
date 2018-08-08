@@ -1,6 +1,31 @@
+@import '../../../public/styles/global-styles';
 .character {
-	&__modal {
-		display: flex;
-		flex-direction: column;
-	}
+    &__modal {
+        margin: auto;
+        width: 96%;
+        max-width: 350px;
+        display: flex;
+        flex-direction: column;
+        text-align: left;
+        .name {
+            @include ACFont();
+            font-size: 24px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        &-books {
+            margin-top: 15px;
+            display: flex;
+            flex-direction: column;
+            span {
+                text-align: left;
+                &:nth-of-type(1) {
+                    text-align: center;
+                }
+                &.booktitle {
+                    font-style: italic;
+                }
+            }
+        }
+    }
 }

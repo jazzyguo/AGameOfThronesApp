@@ -35,7 +35,10 @@
         }
     }
     span {
-        margin: 0 10px;
+        margin: 0 6px;
+        @include breakpoint-min(md) {
+            margin: 0 10px;
+        }
     }
     &__item {
         cursor: pointer;

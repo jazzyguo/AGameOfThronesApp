@@ -37,7 +37,9 @@ class BookListItem extends PureComponent {
     const viewHeight = Math.max(document.documentElement.clientHeight, 
                                 window.innerHeight);
     const rect = this.container.getBoundingClientRect();
-    const visible = !(rect.bottom < 0 || rect.top - viewHeight >= 0);
+    const offSet = 300;
+    const visible = !(rect.bottom < (0 - offSet) 
+      || rect.top - viewHeight >= (0 + offSet));
 
     if(this.state.visible !== visible) {
       this.setState({visible});

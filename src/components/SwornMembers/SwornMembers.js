@@ -6,6 +6,8 @@ import { Link } from 'react-router-dom';
 import CharacterCard from '../CharacterCard/CharacterCard';
 import SwornMembersFilterForm from './components/SwornMembersFilterForm';
 import Loader from '../Loader/Loader';
+import BackIcon from '../Icon/BackIcon';
+import { hasBook } from '../../util/helpers';
 import './SwornMembers.css';
 
 /* Displays a list of the sworn members
@@ -79,20 +81,32 @@ class SwornMembers extends PureComponent {
     let { swornMembers } = this.state;
     let filteredMembers = swornMembers;
     // uses lodash pickBy to filter the current object
-    if(filter === 'all') {
-      this.setState({filteredMembers: null});
-      return;      
-    } else if (filter === 'male') {
+    // if it is a string
+    if(isNaN(filter)){
+      switch(filter) {
+        case 'male':
         filteredMembers = pickBy(filteredMembers, (char) => {
-          return char.gender === 'Male';
-        });
-    } else if (filter === 'female') {
+            return char.gender === 'Male';
+          });
+          break;
+        case 'female':
         filteredMembers = pickBy(filteredMembers, (char) => {
-          return char.gender === 'Female';
-        });    
+            return char.gender === 'Female';
+          });    
+          break;
+        default:
+          this.setState({filteredMembers: null});
+          return;
+      }
+    // else the filter is a book number
+    } else {
+      filteredMembers = pickBy(filteredMembers, (char) => {
+        return hasBook(char.books, filter);
+      });
     }
     // converts the filtered object into an array
-    this.setState({filteredMembers: values(filteredMembers)});
+    const filteredMembersArray = values(filteredMembers);
+    this.setState({filteredMembers: filteredMembersArray});
   }
 
   _renderSwornMembers() {
@@ -101,13 +115,17 @@ class SwornMembers extends PureComponent {
     let toRender = filteredMembers ? filteredMembers : swornMembers;
     return (
       <div className="sworn-members__list">
-        {toRender.length > 1 &&
+        {((toRender.length > 1 && !filteredMembers) || filteredMembers) &&
           <SwornMembersFilterForm onChange={this._handleFilter}/>
         }
         {toRender.map((member, index) => {
           return <CharacterCard key={index} character={member} 
                                 charType="Sworn Member" />
-        })}
+          })
+        }
+        {toRender.length === 0 && filteredMembers &&
+          <div>No Sworn Members found</div>
+        }
       </div>
     );
   }
@@ -117,7 +135,8 @@ class SwornMembers extends PureComponent {
 
     return (
       <div>
-        <Link to='/houses'>Back to Houses</Link>
+        <Link className="back-link" to='/houses'>
+          <BackIcon />Back to Houses</Link>
         <div>Error fetching Sworn Members from House { houseId }</div>
       </div>
     );
@@ -128,7 +147,9 @@ class SwornMembers extends PureComponent {
     const { houseId } = this.props.match.params;
 
     return (
-      <Link to={`/houses/${houseId}`}>Back to { houseName }</Link>
+      <Link className="back-link"
+            to={`/houses/${houseId}`}><BackIcon />
+            Back to { houseName }</Link>
     );
   }
 

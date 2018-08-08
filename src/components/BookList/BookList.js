@@ -1,8 +1,7 @@
-import React, { PureComponent, Fragment } from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { bindAll } from 'lodash';
-import Navbar from '../Navbar/Navbar';
 import BookListItem from './components/BookListItem';
 import BookSortForm from './components/BookSortForm';
 import Loader from '../Loader/Loader';
@@ -95,21 +94,18 @@ class BookList extends PureComponent {
     const { sortedBooks } = this.state;
 
     return (
-      <Fragment>
-        <Navbar />
-        <div className="book-list__container">
-          <BookSortForm onChange={ this._handleSort }/>
-          { loading &&
-            <Loader />
-          }
-          { !loading && !error && sortedBooks &&
-            this._renderBookList()
-          }
-          { error &&
-            'ERROR'
-          }
-        </div>
-      </Fragment>
+      <div className="book-list__container">
+        <BookSortForm onChange={ this._handleSort }/>
+        { loading &&
+          <Loader />
+        }
+        { !loading && !error && sortedBooks &&
+          this._renderBookList()
+        }
+        { error &&
+          'ERROR'
+        }
+      </div>
     );
   }
 }

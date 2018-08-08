@@ -2,6 +2,37 @@
 .home {
     &__container {
         display: flex;
+        flex-direction: column;
         justify-content: center;
+        img {
+            height: 200px;
+            @include breakpoint-min(sm) {
+                height: 300px
+            }
+            @include breakpoint-min(md) {
+                height: 350px
+            }
+            @include breakpoint-min(lg) {
+                height: 450px;
+            }
+            @include breakpoint-min(xl) {
+                height: 550px;
+            }
+        }
+    }
+    &__text {
+        width: 365px;
+        max-width: 96%;
+        text-align: center;
+        &-1 {
+            @include ACFont();
+            font-size: 34px;
+            margin: 25px auto;
+        }
+        &-2 {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 0 auto 25px;
+        }
     }
 }

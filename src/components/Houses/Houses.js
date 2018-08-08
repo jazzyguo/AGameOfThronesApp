@@ -1,7 +1,6 @@
-import React, { PureComponent, Fragment } from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import Navbar from '../Navbar/Navbar';
 import HouseItem from './components/HouseItem';
 //import HouseSortForm from './components/HouseSortForm';
 import Loader from '../Loader/Loader';
@@ -74,24 +73,21 @@ class Houses extends PureComponent {
     const { sortedHouses } = this.state;
 
     return (
-      <Fragment>
-        <Navbar />
-        <div className="houses__container">
-          { /*<HouseSortForm onChange={ this._handleSort }/> */ }
-          { loading &&
-            <Loader />
-          }
-          { !loading && !error && sortedHouses &&
-            this._renderHouses()
-          }
-          { error &&
-            'ERROR'
-          }
-          <Pagination currPage={page} 
-                      goToPage={this._goToPage} 
-                      totalPages={45} />
-        </div>
-      </Fragment>
+      <div className="houses__container">
+        { /*<HouseSortForm onChange={ this._handleSort }/> */ }
+        { loading &&
+          <Loader />
+        }
+        { !loading && !error && sortedHouses &&
+          this._renderHouses()
+        }
+        { error &&
+          'ERROR'
+        }
+        <Pagination currPage={page} 
+                    goToPage={this._goToPage} 
+                    totalPages={45} />
+      </div>
     );
   }
 }

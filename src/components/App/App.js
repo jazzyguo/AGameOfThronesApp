@@ -7,6 +7,7 @@ import Houses from '../Houses/Houses';
 import HouseItemPage from '../Houses/components/HouseItemPage';
 import Header from '../Header/Header';
 import Modal from '../Modal/Modal';
+import Navbar from '../Navbar/Navbar';
 import SwornMembers from '../SwornMembers/SwornMembers';
 import './App.css';
 
@@ -22,6 +23,7 @@ class App extends PureComponent {
     return (
       <div className="container">
         <Header />
+        <Navbar />
         {modalIsOpen &&
           <Modal />
         }

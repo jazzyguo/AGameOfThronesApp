@@ -4,7 +4,7 @@ import { bindAll } from 'lodash';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import InfoIcon from '../Icon/InfoIcon';
-import { checkArrayEmpty } from '../../util/helpers';
+import { checkArrayEmpty, getNumber, bookStrings } from '../../util/helpers';
 import './CharacterCard.css';
 
 /* Displays the char type and the char name
@@ -49,6 +49,21 @@ class CharacterCard extends PureComponent {
     }
   }
 
+  /* Gets all matching books from the character books field
+   */
+  _getCharacterBooks(bookArray) {
+    if(bookArray.length === 0 || checkArrayEmpty(bookArray)) {
+      return (<span>N/A</span>);
+    } else return bookArray.map((bookUrl) => {
+      const bookNum = getNumber(bookUrl);
+      return (
+        <span className="booktitle">
+          Book {bookNum}: {bookStrings[bookNum]}
+        </span>
+      );
+    })
+  }
+
   /* Shows more info of the character by calling the modal
    */
   _showCharacterInfo() {
@@ -64,21 +79,60 @@ class CharacterCard extends PureComponent {
 
     return (
       <div className="character__modal">
-        { character.name }
-        <span>Titles: { !checkArrayEmpty(character.titles) 
-          ? character.titles.join(', ') : 'N/A'}</span>
-        <span>Aliases: { !checkArrayEmpty(character.aliases) 
-          ? character.aliases.join(', ') : 'N/A'}</span>
-        <span>Born: { character.born ? character.born : 'N/A'}</span>
-        <span>Died: { character.died ? character.died : 'N/A'}</span>
-        <span>Gender: { character.gender }</span>
-        <span>Culture: { character.culture ? character.culture : 'N/A'}</span>
+        {/* Name */}
+        <span className="name">{ character.name }</span>
+        {/* Titles*/}
+        <div>
+          <span className="bold">Titles: </span> 
+          { !checkArrayEmpty(character.titles) 
+            ? character.titles.join(', ') : 'N/A'}
+        </div>
+        {/* Aliases */}
+        <div>
+          <span className="bold">Aliases: </span> 
+          { !checkArrayEmpty(character.aliases) 
+            ? character.aliases.join(', ') : 'N/A'}
+        </div>
+        {/* Born*/}
+        <div>
+          <span className="bold">Born: </span> 
+          { character.born ? character.born : 'N/A'}
+        </div>
+        {/* Died */}
+        <div>
+          <span className="bold">Died: </span> 
+          { character.died ? character.died : 'N/A'}
+        </div>
+        {/* Gender */}
+        <div>
+          <span className="bold">Gender: </span> 
+          { character.gender }
+        </div>
+        {/* Culture */}
+        <div>
+          <span className="bold">Culture: </span> 
+          { character.culture ? character.culture : 'N/A'}
+        </div>
+        {/* Parents */}
         <CharacterCard url={ character.mother } charType="Mother" modal={false}/>
         <CharacterCard url={ character.father } charType="Father" modal={false}/>
-        <span>TV Appearances: { !checkArrayEmpty(character.tvSeries) 
-          ? character.tvSeries.join(', ') : 'N/A'}</span>
-        <span>Played By: { !checkArrayEmpty(character.playedBy) 
-          ? character.playedBy.join(', ') : 'N/A'}</span>
+        {/* TV */}
+        <div>
+          <span className="bold">TV Appearances: </span> 
+          { !checkArrayEmpty(character.tvSeries) 
+            ? character.tvSeries.join(', ') : 'N/A'}
+        </div>
+        {/* Played By */}
+        <div>
+          <span className="bold">Played By: </span> 
+          { !checkArrayEmpty(character.playedBy) 
+            ? character.playedBy.join(', ') : 'N/A'}
+        </div>
+        {/* Books */}
+        <div className="character__modal-books">
+        <span className="bold">Appears In:</span>
+          { this._getCharacterBooks(character.books) }
+        </div>
       </div>
     );
   }
@@ -89,15 +143,25 @@ class CharacterCard extends PureComponent {
 
     return (
       <div className="character">
+        {/* Loading */}
         {loading && 
-          <span>{ charType }: Loading</span>
+          <div>
+            <span className="bold">{ charType }: </span> 
+            Loading
+          </div>
         }
+        {/* No Result */}
         {!character && !loading &&
-          <div>{ charType }: None</div>
+          <div>
+            <span className="bold">{ charType }: </span> 
+            None
+          </div>
         }
+        {/* Info Loaded */}
         {character && !loading &&
           <div>
-            <span>{ charType }: { character.name }</span>
+              <span className="bold">{ charType }: </span> 
+              { character.name }
             {modal &&
               <InfoIcon onClick={this._showCharacterInfo} />
             }

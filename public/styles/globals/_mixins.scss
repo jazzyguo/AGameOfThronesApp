@@ -37,3 +37,18 @@
         }
     }
 }
+@mixin page() {
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    max-width: 800px;
+    text-align: center;
+}
+@mixin pageContent() {
+    width: 450px;
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-top: 25px;
+    margin: auto;
+}

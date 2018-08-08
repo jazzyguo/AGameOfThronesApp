@@ -3,9 +3,10 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { bindAll } from 'lodash';
 import PropTypes from 'prop-types';
-import { checkArrayEmpty } from '../../../util/helpers';
+import { checkArrayEmpty, getNumber } from '../../../util/helpers';
 import CharacterCard from '../../CharacterCard/CharacterCard';
 import Loader from '../../Loader/Loader';
+import BackIcon from '../../Icon/BackIcon';
 
 class HouseItemPage extends PureComponent {  
 
@@ -24,8 +25,7 @@ class HouseItemPage extends PureComponent {
     if(!house) {
       requestHouse(houseId);
     } else {
-      const idRegex = /[0-9]+/;
-      const urlHouseId = house.url.match(idRegex)[0];
+      const urlHouseId = getNumber(house.url);
       // no reason to request from the api if we already have the same house in store
       if(houseId !== urlHouseId) {
         requestHouse(houseId);
@@ -42,22 +42,59 @@ class HouseItemPage extends PureComponent {
 
     return (
       <div className="houses__page-info">
+        {/* Name */}
         <span className="name">{ name }</span>
-        <span>Region: { region }  </span>
-        <span>Coat of Arms: { coatOfArms }</span>
-        <span>{ words }</span>
+        {/* Region */}
+        <div>
+          <span className="bold">Region: </span> 
+          { region }  
+        </div>
+        {/* COA */}
+        <div>
+          <span className="bold">Coat of Arms: </span>
+          { coatOfArms }
+        </div>
+        {/* words */}
+        <div>
+          <span className="bold">Words: </span>
+          <span className="words">{ words }</span>
+        </div>
+        {/* Founder */}
         <CharacterCard url={ founder } charType="Founder" />
-        <span>Founded in { founded ? founded : 'N/A' }</span>
-        <span>Died out: { diedOut ? diedOut : 'N/A' }</span>
+        {/* Founded */}
+        <div>
+          <span className="bold">Founded in: </span>
+          { founded ? founded : 'N/A' }
+        </div>
+        {/* Died */}
+        <div>
+          <span className="bold">Died out: </span>
+          { diedOut ? diedOut : 'N/A' }
+        </div>
+        {/* Characters */}
         <CharacterCard url={ currentLord } charType="Current Lord" />
         <CharacterCard url={ heir } charType="Heir" />
-        <span>Titles: { !checkArrayEmpty(titles) 
-          ? titles.join(', ') : 'None'}</span>
-        <span>Seats: { !checkArrayEmpty(seats) 
-          ? seats.join(', ') : 'None' }</span>
-        <span>Ancestral Weapons: { !checkArrayEmpty(ancestralWeapons) 
-          ? ancestralWeapons.join(', ') : 'None' }</span>
-        <Link to={{
+        {/* Titles */}
+        <div>
+          <span className="bold">Titles: </span>
+          { !checkArrayEmpty(titles) 
+            ? titles.join(', ') : 'None'}
+        </div>
+        {/* Seats */}
+        <div>
+          <span className="bold">Seats: </span>
+          { !checkArrayEmpty(seats) 
+            ? seats.join(', ') : 'None' }
+        </div>
+        {/* Ancestral Weapons */}
+        <div>
+          <span className="bold">Ancestral Weapons: </span>
+          { !checkArrayEmpty(ancestralWeapons) 
+            ? ancestralWeapons.join(', ') : 'None' }
+        </div>
+        {/* Sworn Members Link */}
+        <Link className="sworn-members__link" 
+        to={{
           pathname: `/houses/${houseId}/sworn-members`,
           state: { 
             swornMembers: swornMembers,
@@ -81,7 +118,7 @@ class HouseItemPage extends PureComponent {
           state: { 
             reset: false
           }
-        }}>Back to Houses</Link>
+        }} className="back-link"><BackIcon />Back to Houses</Link>
         {/* Show Error Message*/}
         {error &&
           <div>Error fetching house { houseId }</div>
